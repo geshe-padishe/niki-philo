@@ -8,11 +8,12 @@
 
 typedef struct s_table
 {
-	long	 nb_philos;
-	long	 time_to_die;
-	long	 time_to_eat;
-	long	 time_to_sleep;
-	long	 nb_meals;
+	t_dynarray	*darr;
+	long		 nb_philos;
+	long		 time_to_die;
+	long		 time_to_eat;
+	long		 time_to_sleep;
+	long		 nb_meals;
 }				t_table;
 
 typedef struct s_philo

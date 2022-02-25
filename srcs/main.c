@@ -1,8 +1,8 @@
 #include "ft_philo.h"
 
-void *routine(t_philo *philo)
+void *routine(t_table *table)
 {
-
+	
 }
 
 int	parse_args(char **argv, t_table *table)
@@ -34,7 +34,7 @@ void print_table(t_table table)
 	printf("nb_meals = %ld\n", table.nb_meals);
 }
 
-int	create_philo(int nb_philo)
+int	create_philos(t_table *table)
 {
 	int		i;
 	t_philo	philo;
@@ -42,7 +42,10 @@ int	create_philo(int nb_philo)
 	i = 0;
 	while (i < nb_philo)
 	{
-		if (pthread_create(philo, NULL, &routine, t_table);
+		if (pthread_create(philo, NULL, &routine, t_table)
+			if (push_dynarray(table->darr, &philo, 1, 0) == -1)
+				return (-1);
+		i++;
 	}
 }
 
@@ -54,7 +57,9 @@ int main(int argc, char **argv)
 
 	if (argc != 6 || parse_args(argv, &table) != 0)
 		return (-1);
-	init_dynarray(&darr, 1, sizeof(philo));	
+	if (init_dynarray(&darr, 1, sizeof(philo)) == -1)
+		return (free_dynarray(&darr), -1);
+	table.darr = &darr;
 	print_table(table);
 //	if (pthread_create(&t1, NULL, &routine2, NULL) != 0)
 //		return (-1);

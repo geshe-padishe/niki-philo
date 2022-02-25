@@ -37,4 +37,3 @@ int	ft_atoi(char *nstr)
 		return (0);
 	return ((int)nbr * sign);
 }
-
