@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include "dynarray.h"
 
 typedef struct s_table
 {
@@ -26,5 +27,10 @@ typedef struct s_philo
 
 int	ft_atoi(char *nstr);
 int	ft_atoi_sign(char **nstr);
+void	*routine(void *ptr);
+int	parse_args(char **argv, t_table *table);
+void	print_table(t_table table);
+int	create_philos(t_table *table);
+void	ft_memset(void *ptr, size_t size);
 
 #endif

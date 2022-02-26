@@ -1,8 +1,14 @@
 #include "ft_philo.h"
 
-void *routine(t_table *table)
+void *routine(void *ptr)
 {
-	
+	t_table *table;
+
+	table = (t_table *)ptr;
+	dprintf(1, "printing in 3...");
+	sleep(3);
+	print_table(*table);
+	return (table);
 }
 
 int	parse_args(char **argv, t_table *table)
@@ -40,34 +46,34 @@ int	create_philos(t_table *table)
 	t_philo	philo;
 
 	i = 0;
-	while (i < nb_philo)
+	while (i < table->nb_philos)
 	{
-		if (pthread_create(philo, NULL, &routine, t_table)
-			if (push_dynarray(table->darr, &philo, 1, 0) == -1)
-				return (-1);
+		if (pthread_create(philo.thread, NULL, &routine, table))
+			return (-1);
+		if (pthread_join(*philo.thread, NULL) != 0)
+			return (-1);
+		if (push_dynarray(table->darr, &philo, 1, 0) == -1)
+			return (-1);
 		i++;
 	}
+	return (0);
 }
 
 int main(int argc, char **argv)
 {
 	t_table		table;
 	t_dynarray	darr;
-	t_philo		philo
 
+	ft_memset(&table, sizeof(t_table));
 	if (argc != 6 || parse_args(argv, &table) != 0)
 		return (-1);
-	if (init_dynarray(&darr, 1, sizeof(philo)) == -1)
+	ft_memset(&darr, sizeof(t_dynarray));
+	ft_memset(&table, sizeof(t_table));
+	if (init_dynarray(&darr, 1, sizeof(t_philo)) == -1)
+		return (free_dynarray(&darr), -1);
+	if (create_philos(&table))
 		return (free_dynarray(&darr), -1);
 	table.darr = &darr;
 	print_table(table);
-//	if (pthread_create(&t1, NULL, &routine2, NULL) != 0)
-//		return (-1);
-//	if (pthread_create(&t2, NULL, &routine2, NULL) != 0)
-//		return (-1);
-//	if (pthread_join(t1, NULL) != 0)
-//		return (-1);
-//	if (pthread_join(t2, NULL) != 0)
-//		return (-1);
-	return (0);
+	return (free_dynarray(&darr), 0);
 }
