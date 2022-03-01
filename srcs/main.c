@@ -5,9 +5,9 @@ void *routine(void *ptr)
 	t_table *table;
 
 	table = (t_table *)ptr;
-	dprintf(1, "printing in 3...");
+	printf("printing in 3...\n");
 	sleep(3);
-	print_table(*table);
+	printf("yuhuuuuu\n");
 	return (table);
 }
 
@@ -48,10 +48,10 @@ int	create_philos(t_table *table)
 	i = 0;
 	while (i < table->nb_philos)
 	{
-		if (pthread_create(philo.thread, NULL, &routine, table))
+		if (pthread_create(&philo.thread, NULL, &routine, table))
 			return (-1);
-		if (pthread_join(*philo.thread, NULL) != 0)
-			return (-1);
+	//	if (pthread_join(philo.thread, NULL) != 0)
+	//		return (-1);
 		if (push_dynarray(table->darr, &philo, 1, 0) == -1)
 			return (-1);
 		i++;
@@ -66,14 +66,12 @@ int main(int argc, char **argv)
 
 	ft_memset(&table, sizeof(t_table));
 	if (argc != 6 || parse_args(argv, &table) != 0)
-		return (-1);
-	ft_memset(&darr, sizeof(t_dynarray));
-	ft_memset(&table, sizeof(t_table));
+		return (printf("Invalid Args\n"), -1);
 	if (init_dynarray(&darr, 1, sizeof(t_philo)) == -1)
 		return (free_dynarray(&darr), -1);
+	table.darr = &darr;
 	if (create_philos(&table))
 		return (free_dynarray(&darr), -1);
-	table.darr = &darr;
 	print_table(table);
 	return (free_dynarray(&darr), 0);
 }

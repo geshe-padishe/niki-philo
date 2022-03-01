@@ -2,9 +2,9 @@ CC = gcc
 
 NAME = philo
 
-CFLAGS = -Wall -Wextra -Werror -pthread -g3
+CFLAGS = -Wall -Wextra -Werror -pthread -g3 -fsanitize=address
 
-SRC = dynarray2.c dynarray.c ft_parse_utils.c main.c ft_mems.c
+SRC = dynarray2.c dynarray.c ft_parse_utils.c main.c ft_mems.c ft_philo2.c
 SRC_D = srcs
 SRC_C = $(addprefix ${SRC_D}/, ${SRC})
 
@@ -15,7 +15,7 @@ INC_H = $(addprefix ${INC_D}/, ${INC})
 all: $(NAME)
 
 $(NAME): ${INC_H}
-	${CC} ${CFLAGS} ${SRC_C} ${INC_H} -I${INC_D} -o ${NAME}
+	${CC} ${CFLAGS} ${SRC_C} -I${INC_D} -o ${NAME}
 
 clean:
 	rm -f $(OBJS)

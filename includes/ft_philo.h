@@ -5,24 +5,27 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <sys/time.h>
 #include "dynarray.h"
 
 typedef struct s_table
 {
 	t_dynarray	*darr;
-	long		 nb_philos;
-	long		 time_to_die;
-	long		 time_to_eat;
-	long		 time_to_sleep;
-	long		 nb_meals;
+	long		nb_philos;
+	long		time_to_die;
+	long		time_to_eat;
+	long		time_to_sleep;
+	long		nb_meals;
+	long		start_time;
 }				t_table;
 
 typedef struct s_philo
 {
-	pthread_t	*thread;
+	pthread_t	thread;
 	int			philo_nb;
 	int			last_meal_time;
 	int			meals;
+	bool		alive;
 }				t_philo;
 
 int	ft_atoi(char *nstr);
