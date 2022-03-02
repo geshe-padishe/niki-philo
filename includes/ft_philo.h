@@ -16,7 +16,6 @@ typedef struct s_table
 	long		time_to_eat;
 	long		time_to_sleep;
 	long		nb_meals;
-	long		start_time;
 }				t_table;
 
 typedef struct s_philo
@@ -26,6 +25,8 @@ typedef struct s_philo
 	int			last_meal_time;
 	int			meals;
 	bool		alive;
+	struct timeval		start_time;
+	struct timezone		time_zone;;
 }				t_philo;
 
 int	ft_atoi(char *nstr);

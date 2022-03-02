@@ -50,6 +50,8 @@ int	create_philos(t_table *table)
 	{
 		if (pthread_create(&philo.thread, NULL, &routine, table))
 			return (-1);
+		if (gettimeofday(&philo.start_time, &philo.time_zone))
+			return (-1);
 	//	if (pthread_join(philo.thread, NULL) != 0)
 	//		return (-1);
 		if (push_dynarray(table->darr, &philo, 1, 0) == -1)
