@@ -2,13 +2,24 @@
 
 void *routine(void *ptr)
 {
-	t_table *table;
+	t_philo *philo;
+	struct timeval	time_val;
+	struct timezone	time_zone;
 
-	table = (t_table *)ptr;
-	printf("printing in 3...\n");
-	sleep(3);
-	printf("yuhuuuuu\n");
-	return (table);
+	while (philo->alive)
+	{
+		if (gettimeofday(&time_val, &time_zone))
+			return (NULL);
+		if (time_val.tv_usec - philo->start_time.tv_usec >
+			philo->table->time_to_die * 1000)
+			return (NULL); //IS DEAD
+		philo = (t_philo *)ptr;
+		printf("Eating\n");
+		ft_sleep(philo->table->time_to_eat);
+		printf("Sleeping\n");
+		ft_sleep(philo->table->time_to_sleep);
+	}
+	return (philo);
 }
 
 int	parse_args(char **argv, t_table *table)
@@ -16,16 +27,16 @@ int	parse_args(char **argv, t_table *table)
 	table->nb_philos = ft_atoi(argv[1]);
 	if (table->nb_philos <= 0)
 		return (-1);
-	table->time_to_die = ft_atoi(argv[2]);
+	table->time_to_die = ft_atoi(argv[2]) * 1000;
 	if (table->time_to_die <= 60)
 		return (-1);
-	table->time_to_eat = ft_atoi(argv[3]);
+	table->time_to_eat = ft_atoi(argv[3]) * 1000;
 	if (table->time_to_eat <= 60)
 		return (-1);
-	table->time_to_sleep = ft_atoi(argv[4]);
+	table->time_to_sleep = ft_atoi(argv[4]) * 1000;
 	if (table->time_to_sleep <= 60)
 		return (-1);
-	table->nb_meals = ft_atoi(argv[5]);
+	table->nb_meals = ft_atoi(argv[5]) * 1000;
 	if (table->nb_meals <= 60)
 		return (-1);
 	return (0);
@@ -42,18 +53,20 @@ void print_table(t_table table)
 
 int	create_philos(t_table *table)
 {
-	int		i;
-	t_philo	philo;
+	unsigned long	i;
+	t_philo			philo;
 
 	i = 0;
+	ft_memset(&philo, sizeof(t_philo));
+	philo.table = table;
 	while (i < table->nb_philos)
 	{
-		if (pthread_create(&philo.thread, NULL, &routine, table))
-			return (-1);
 		if (gettimeofday(&philo.start_time, &philo.time_zone))
 			return (-1);
-	//	if (pthread_join(philo.thread, NULL) != 0)
-	//		return (-1);
+		if (pthread_create(&philo.thread, NULL, &routine, &philo))
+			return (-1);
+		if (pthread_join(philo.thread, NULL) != 0)
+			return (-1);
 		if (push_dynarray(table->darr, &philo, 1, 0) == -1)
 			return (-1);
 		i++;
