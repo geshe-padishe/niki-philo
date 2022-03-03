@@ -1,11 +1,11 @@
 #include "ft_philo.h"
 
-int	ft_sleep(long microsec)
+int	ft_sleep(long millisec)
 {
-	unsigned long	time;
+	long	time;
 
 	time = 0;
-	while (time < microsec)
+	while (time < millisec * 1000)
 	{
 		if (usleep(1000))
 			return (-1);
@@ -20,6 +20,6 @@ int	ft_ms(long *ms)
 
 	if (gettimeofday(&time_val, NULL))
 		return (-1);
-	ms = time_val.tv_sec * 1000 + time_val.tv_usec / 1000;
+	*ms = time_val.tv_sec * 1000 + time_val.tv_usec / 1000;
 	return (0);
 }
