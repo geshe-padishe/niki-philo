@@ -3,26 +3,25 @@
 void *routine(void *ptr)
 {
 	t_philo			*philo;
-	long	time_ms;
+	struct timeval	time;
 
 	philo = ptr;
 	while (!philo->dead)
 	{
-		ft_ms(&time_ms);
-		printf("time = %ld\n", time_ms);
-		printf("time diff = %ld\n", time_ms - philo->ate_time);
-		printf("ate_time = %ld\n", philo->ate_time);
-		if (time_ms - philo->ate_time >
+		if (ft_timeget(&time))
+			return (NULL);
+		printf("time diff = %d\n", ft_timediff_ms(time, philo->ate_time));
+		if (ft_timediff_ms(time, philo->ate_time) >=
 			philo->table->time_to_die)
 		{
 			philo->dead = 1;
 			return (NULL); //IS DEAD
 		}
-		philo->ate_time = time_ms;
+		philo->ate_time = time;
 		printf("Eating\n");
-		ft_sleep(philo->table->time_to_eat);
+		usleep(philo->table->time_to_eat * 1000);
 		printf("Sleeping\n");
-		ft_sleep(philo->table->time_to_sleep);
+		usleep(philo->table->time_to_sleep * 1000);
 	}
 	return (philo);
 }
@@ -66,7 +65,7 @@ int	create_philos(t_table *table)
 	philo.table = table;
 	while (i < table->nb_philos)
 	{
-		if (ft_ms(&philo.ate_time))
+		if (ft_timeget(&philo.ate_time))
 			return (-1);
 		if (pthread_create(&philo.thread, NULL, &routine, &philo))
 			return (-1);

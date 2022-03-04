@@ -26,7 +26,7 @@ typedef struct s_philo
 	int				philo_nb;
 	int				meals;
 	bool			dead;
-	long	ate_time;
+	struct timeval	ate_time;
 }				t_philo;
 
 int	ft_atoi(char *nstr);
@@ -38,5 +38,7 @@ int	create_philos(t_table *table);
 void	ft_memset(void *ptr, size_t size);
 int	ft_sleep(long microsec);
 int	ft_ms(long *ms);
+int	ft_timeget(struct timeval *time_val);
+int	ft_timediff_ms(struct timeval time_val, struct timeval time_val2);
 
 #endif
