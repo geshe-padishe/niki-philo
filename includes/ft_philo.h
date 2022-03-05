@@ -40,8 +40,10 @@ void	ft_memset(void *ptr, size_t size);
 int	ft_sleep(long microsec);
 int	ft_ms(long *ms);
 int	ft_timeget(struct timeval *time_val);
-int	ft_timediff_ms(struct timeval time_val, struct timeval time_val2);
+int	ft_timediff_us(struct timeval time_val, struct timeval time_val2);
 void	ft_putnbr(int nbr);
 int	ft_puttime(struct timeval start_time);
+int	ft_strlen(char *str);
+void	ft_write(char *str);
 
 #endif

@@ -10,9 +10,9 @@ void *routine(void *ptr)
 	{
 		if (ft_timeget(&time))
 			return (NULL);
-		printf("time diff = %d\n", ft_timediff_ms(time, philo->ate_time));
-		if (ft_timediff_ms(time, philo->ate_time) >=
-			philo->table->time_to_die)
+		printf("time diff = %d\n", ft_timediff_us(time, philo->ate_time));
+		if (ft_timediff_us(time, philo->ate_time) >=
+			philo->table->time_to_die * 1000)
 		{
 			philo->dead = 1;
 			return (NULL); //IS DEAD
@@ -45,8 +45,8 @@ int	parse_args(char **argv, t_table *table)
 	if (table->time_to_sleep <= 60)
 		return (-1);
 	table->nb_meals = ft_atoi(argv[5]);
-	if (table->nb_meals <= 60)
-		return (-1);
+//	if (table->nb_meals <= 60)
+//		return (-1);
 	return (0);
 }
 
@@ -64,11 +64,11 @@ int	create_philos(t_table *table)
 			return (-1);
 		if (ft_timeget(&philo.start_time))
 			return (-1);
+		if (push_dynarray(table->darr, &philo, 1, 0) == -1)
+			return (-1);
 		if (pthread_create(&philo.thread, NULL, &routine, &philo))
 			return (-1);
 		if (pthread_join(philo.thread, NULL) != 0)
-			return (-1);
-		if (push_dynarray(table->darr, &philo, 1, 0) == -1)
 			return (-1);
 		i++;
 	}

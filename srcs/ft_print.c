@@ -15,7 +15,7 @@ int	ft_puttime(struct timeval start_time)
 
 	if (ft_timeget(&current_time))
 		return (-1);
-	ft_putnbr(ft_timediff_ms(current_time, start_time));
+	ft_putnbr(ft_timediff_us(current_time, start_time) / 1000);
 	write(1, " ", 1);
 	return (0);
 }
@@ -25,8 +25,12 @@ void	ft_putnbr(int nbr)
 	char	c;
 
 	c = nbr % 10 + 48;
-	if (nbr > 0)
+	if (nbr > 9)
 		ft_putnbr(nbr / 10);
-	if (nbr > 0)
-		write(1, &c, 1);
+	write(1, &c, 1);
+}
+
+void	ft_write(char *str)
+{
+	write(1, str, ft_strlen(str));
 }

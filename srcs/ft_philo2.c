@@ -1,25 +1,11 @@
 #include "ft_philo.h"
 
-int	ft_sleep(long microsec)
+int ft_strlen(char *str)
 {
-	unsigned long	time;
+	int	i;
 
-	time = 0;
-	while (time < microsec)
-	{
-		if (usleep(1000))
-			return (-1);
-		time += 1000;
-	}
-	return (0);
-}
-
-int	ft_ms(long *ms)
-{
-	struct timeval	time_val;
-
-	if (gettimeofday(&time_val, NULL))
-		return (-1);
-	ms = time_val.tv_sec * 1000 + time_val.tv_usec / 1000;
-	return (0);
+	i = 0;
+	while (str && str[i])
+		i++;
+	return (i);
 }
