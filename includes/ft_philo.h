@@ -27,6 +27,7 @@ typedef struct s_philo
 	int				meals;
 	bool			dead;
 	struct timeval	ate_time;
+	struct timeval	start_time;
 }				t_philo;
 
 int	ft_atoi(char *nstr);
@@ -40,5 +41,7 @@ int	ft_sleep(long microsec);
 int	ft_ms(long *ms);
 int	ft_timeget(struct timeval *time_val);
 int	ft_timediff_ms(struct timeval time_val, struct timeval time_val2);
+void	ft_putnbr(int nbr);
+int	ft_puttime(struct timeval start_time);
 
 #endif

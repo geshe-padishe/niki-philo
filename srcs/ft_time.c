@@ -7,9 +7,9 @@ int	ft_sleep(long millisec)
 	time = 0;
 	while (time < millisec * 1000)
 	{
-		if (usleep(1000))
+		if (usleep(100))
 			return (-1);
-		time += 1000;
+		time += 100;
 	}
 	return (0);
 }

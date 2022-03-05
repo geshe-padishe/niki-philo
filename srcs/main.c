@@ -18,9 +18,13 @@ void *routine(void *ptr)
 			return (NULL); //IS DEAD
 		}
 		philo->ate_time = time;
+		ft_puttime(philo->start_time);
 		printf("Eating\n");
+		//ft_sleep(philo->table->time_to_eat);
 		usleep(philo->table->time_to_eat * 1000);
+		ft_puttime(philo->start_time);
 		printf("Sleeping\n");
+		ft_puttime(philo->start_time);
 		usleep(philo->table->time_to_sleep * 1000);
 	}
 	return (philo);
@@ -46,15 +50,6 @@ int	parse_args(char **argv, t_table *table)
 	return (0);
 }
 
-void print_table(t_table table)
-{
-	printf("nb_philos = %ld\n", table.nb_philos);
-	printf("time_to_die = %ld\n", table.time_to_die);
-	printf("time_to_eat = %ld\n", table.time_to_eat);
-	printf("time_to_sleep = %ld\n", table.time_to_sleep);
-	printf("nb_meals = %ld\n", table.nb_meals);
-}
-
 int	create_philos(t_table *table)
 {
 	unsigned long	i;
@@ -66,6 +61,8 @@ int	create_philos(t_table *table)
 	while (i < table->nb_philos)
 	{
 		if (ft_timeget(&philo.ate_time))
+			return (-1);
+		if (ft_timeget(&philo.start_time))
 			return (-1);
 		if (pthread_create(&philo.thread, NULL, &routine, &philo))
 			return (-1);
