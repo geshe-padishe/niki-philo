@@ -5,28 +5,34 @@ void *routine(void *ptr)
 	t_philo			*philo;
 	struct timeval	time;
 
+	(void)time;
 	philo = ptr;
-	while (!philo->dead)
-	{
-		if (ft_timeget(&time))
-			return (NULL);
-		printf("time diff = %d\n", ft_timediff_us(time, philo->ate_time));
-		if (ft_timediff_us(time, philo->ate_time) >=
-			philo->table->time_to_die * 1000)
-		{
-			philo->dead = 1;
-			return (NULL); //IS DEAD
-		}
-		philo->ate_time = time;
-		ft_puttime(philo->start_time);
-		ft_write("Eeating\n");
-		ft_sleep(philo->table->time_to_eat);
-		//usleep(philo->table->time_to_eat * 1000);
-		ft_puttime(philo->start_time);
-		ft_write("Sleeping\n");
-		ft_sleep(philo->table->time_to_sleep);
-		//usleep(philo->table->time_to_sleep * 1000);
-	}
+	ft_putnbr(philo->id);
+	dprintf(1, "address = %p\n", philo);
+	write(1, "\n", 1);
+//	while (!philo->dead)
+//	{
+//		if (ft_timeget(&time))
+//			return (NULL);
+//		ft_putnbr(ft_timediff_us(time, philo->ate_time));
+//		write(1, "\n", 1);
+//		if (ft_timediff_us(time, philo->ate_time) >=
+//			philo->table->time_to_die * 1000)
+//		{
+//			philo->dead = 1;
+//			return (NULL); //IS DEAD
+//		}
+//		philo->ate_time = time;
+//		ft_puttime(philo->start_time);
+//		ft_write("Eeating\n", philo->id);
+//		ft_sleep(philo->table->time_to_eat);
+//		//usleep(philo->table->time_to_eat * 1000);
+//		ft_puttime(philo->start_time);
+//		ft_write("Sleeping\n", philo->id);
+//		ft_sleep(philo->table->time_to_sleep);
+//		//usleep(philo->table->time_to_sleep * 1000);
+//	}
+	ft_write("Died", philo->id);
 	return (philo);
 }
 
@@ -56,18 +62,24 @@ int	create_philos(t_table *table)
 	t_philo			philo;
 
 	i = 0;
-	ft_memset(&philo, sizeof(t_philo));
-	philo.table = table;
 	while (i < table->nb_philos)
 	{
+		ft_memset(&philo, sizeof(t_philo));
+		philo.table = table;
+		philo.id = i +1;
 		if (ft_timeget(&philo.ate_time))
 			return (-1);
 		if (ft_timeget(&philo.start_time))
 			return (-1);
-		if (push_dynarray(table->darr, &philo, 1, 0) == -1)
-			return (-1);
 		if (pthread_create(&philo.thread, NULL, &routine, &philo))
 			return (-1);
+		if (push_dynarray(table->darr, &philo, 1, 0) == -1)
+			return (-1);
+		i++;
+	}
+	i = 0;
+	while (i < table->nb_philos)
+	{
 		if (pthread_join(philo.thread, NULL) != 0)
 			return (-1);
 		i++;
@@ -83,7 +95,7 @@ int main(int argc, char **argv)
 	ft_memset(&table, sizeof(t_table));
 	if (argc != 6 || parse_args(argv, &table) != 0)
 		return (printf("Invalid Args\n"), -1);
-	if (init_dynarray(&darr, 1, sizeof(t_philo)) == -1)
+	if (init_dynarray(&darr, table.nb_philos, sizeof(t_philo)) == -1)
 		return (free_dynarray(&darr), -1);
 	table.darr = &darr;
 	if (create_philos(&table))

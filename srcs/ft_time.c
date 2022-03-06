@@ -8,7 +8,7 @@ int	ft_sleep(long millisec)
 	ft_timeget(&time);
 	while (ft_timediff_us(time2, time) < millisec * 1000)
 	{
-		if (usleep(10))
+		if (usleep(1))
 			return (-1);
 		ft_timeget(&time2);
 	}

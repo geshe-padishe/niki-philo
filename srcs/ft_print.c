@@ -30,7 +30,10 @@ void	ft_putnbr(int nbr)
 	write(1, &c, 1);
 }
 
-void	ft_write(char *str)
+void	ft_write(char *str, int philo_id)
 {
+	write(1, "Philo ", 6);
+	ft_putnbr(philo_id);
+	write(1, " ", 1);
 	write(1, str, ft_strlen(str));
 }

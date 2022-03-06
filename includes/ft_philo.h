@@ -20,7 +20,7 @@ typedef struct s_table
 
 typedef struct s_philo
 {
-	unsigned long	philo_id;
+	int	id;
 	t_table			*table;
 	pthread_t		thread;
 	int				philo_nb;
@@ -44,6 +44,6 @@ int	ft_timediff_us(struct timeval time_val, struct timeval time_val2);
 void	ft_putnbr(int nbr);
 int	ft_puttime(struct timeval start_time);
 int	ft_strlen(char *str);
-void	ft_write(char *str);
+void	ft_write(char *str, int philo_id);
 
 #endif
