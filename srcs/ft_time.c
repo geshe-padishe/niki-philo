@@ -6,6 +6,7 @@ int	ft_sleep(long millisec)
 	struct timeval	time2;
 
 	ft_timeget(&time);
+	ft_timeget(&time2);
 	while (ft_timediff_us(time2, time) < millisec * 1000)
 	{
 		if (usleep(1))

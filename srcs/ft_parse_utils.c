@@ -37,3 +37,23 @@ int	ft_atoi(char *nstr)
 		return (0);
 	return ((int)nbr * sign);
 }
+
+int	parse_args(char **argv, t_table *table)
+{
+	table->nb_philos = ft_atoi(argv[1]);
+	if (table->nb_philos <= 0)
+		return (-1);
+	table->time_to_die = ft_atoi(argv[2]);
+	if (table->time_to_die <= 60)
+		return (-1);
+	table->time_to_eat = ft_atoi(argv[3]);
+	if (table->time_to_eat <= 60)
+		return (-1);
+	table->time_to_sleep = ft_atoi(argv[4]);
+	if (table->time_to_sleep <= 60)
+		return (-1);
+	table->nb_meals = ft_atoi(argv[5]);
+//	if (table->nb_meals <= 60)
+//		return (-1);
+	return (0);
+}

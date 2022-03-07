@@ -10,6 +10,7 @@
 
 typedef struct s_table
 {
+	bool				dead;
 	t_dynarray			*darr;
 	unsigned long		nb_philos;
 	long				time_to_die;
@@ -44,6 +45,6 @@ int	ft_timediff_us(struct timeval time_val, struct timeval time_val2);
 void	ft_putnbr(int nbr);
 int	ft_puttime(struct timeval start_time);
 int	ft_strlen(char *str);
-void	ft_write(char *str, int philo_id);
+void	ft_write(char *str, t_philo philo);
 
 #endif
