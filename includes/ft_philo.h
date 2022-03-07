@@ -22,6 +22,7 @@ typedef struct s_table
 typedef struct s_philo
 {
 	int	id;
+	char			fork;
 	t_table			*table;
 	pthread_t		thread;
 	int				philo_nb;

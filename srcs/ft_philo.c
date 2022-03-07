@@ -49,13 +49,13 @@ int	create_philos(t_table *table)
 			return (-1);
 		i++;
 	}
-	i = 0;
-	while (i < table->nb_philos)
-	{
-		if (pthread_join(philo.thread, NULL) != 0)
-			return (-1);
-		i++;
-	}
+//	i = 0;
+//	while (i < table->nb_philos)
+//	{
+//		if (pthread_join(philo.thread, NULL) != 0)
+//			return (-1);
+//		i++;
+//	}
 	return (0);
 }
 
