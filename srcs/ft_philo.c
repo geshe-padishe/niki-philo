@@ -7,9 +7,10 @@ void *routine(void *ptr)
 
 	(void)time;
 	philo = ptr;
-	ft_putnbr(philo->id);
+	dprintf(1, "STARTING THREAD %i\n", philo->id);
 	while (!philo->dead)
 	{
+		pthread_mutex_lock(philo->mutex);
 		if (ft_timeget(&time))
 			return (NULL);
 	//	ft_putnbr(ft_timediff_us(time, philo->ate_time));
@@ -23,8 +24,12 @@ void *routine(void *ptr)
 		ft_sleep(philo->table->time_to_eat);
 		ft_write("Sleeping\n", *philo);
 		ft_sleep(philo->table->time_to_sleep);
+		ft_write("Thinking\n", *philo);
+		pthread_mutex_unlock(philo->mutex);
 	}
-	ft_write("Died", *philo);
+	pthread_mutex_lock(philo->mutex);
+	ft_write("Died\n", *philo);
+	pthread_mutex_unlock(philo->mutex);
 	return (philo);
 }
 
@@ -32,30 +37,34 @@ int	create_philos(t_table *table)
 {
 	unsigned long	i;
 	t_philo			philo;
+	pthread_mutex_t	mutex;
 
 	i = 0;
+	pthread_mutex_init(&mutex, NULL);
 	while (i < table->nb_philos)
 	{
 		ft_memset(&philo, sizeof(t_philo));
 		philo.table = table;
 		philo.id = i;
+		philo.mutex = &mutex;
 		if (ft_timeget(&philo.ate_time))
 			return (-1);
 		if (ft_timeget(&philo.start_time))
 			return (-1);
 		if (push_dynarray(table->darr, &philo, 1, 0) == -1)
 			return (-1);
-		if (pthread_create(&philo.thread, NULL, &routine, &((t_philo *)table->darr->list)[i]))
+		if (pthread_create(&((t_philo *)table->darr->list)[i].thread, NULL, &routine, &((t_philo *)table->darr->list)[i]))
 			return (-1);
 		i++;
 	}
-//	i = 0;
-//	while (i < table->nb_philos)
-//	{
-//		if (pthread_join(philo.thread, NULL) != 0)
-//			return (-1);
-//		i++;
-//	}
+	i = 0;
+	while (i < table->nb_philos)
+	{
+		if (pthread_join(((t_philo *)table->darr->list)[i].thread, NULL) != 0)
+			return (-1);
+		i++;
+	}
+	pthread_mutex_destroy(&mutex);
 	return (0);
 }
 
