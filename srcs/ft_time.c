@@ -1,17 +1,21 @@
 #include "ft_philo.h"
 
-int	ft_sleep(long millisec)
+int	ft_sleep(long millisec, bool dead)
 {
 	struct timeval	time;
 	struct timeval	time2;
 
-	ft_timeget(&time);
-	ft_timeget(&time2);
-	while (ft_timediff_us(time2, time) < millisec * 1000)
+	if (dead == 0)
 	{
-		if (usleep(1))
-			return (-1);
+		ft_timeget(&time);
 		ft_timeget(&time2);
+		while (ft_timediff_us(time2, time) < millisec * 1000)
+		{
+			if (usleep(1))
+				return (-1);
+			ft_timeget(&time2);
+		}
+		return (0);
 	}
 	return (0);
 }
