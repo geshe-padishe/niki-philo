@@ -45,7 +45,7 @@ void	ft_write(char *str, t_philo *philo, bool death)
 	pthread_mutex_lock(philo->rd_mutex);	
 	ft_puttime(philo->start_time);
 	write(1, "Philo ", 6);
-	ft_putnbr(philo->id);
+	ft_putnbr(philo->id + 1);
 	write(1, " ", 1);
 	write(1, str, ft_strlen(str));
 	pthread_mutex_unlock(philo->rd_mutex);

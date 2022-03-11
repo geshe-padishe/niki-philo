@@ -20,22 +20,6 @@ int	ft_sleep(long millisec, bool dead)
 	return (0);
 }
 
-//int	ft_sleep(long time_to_do)
-//{
-//	long	time;
-//	long	time2;
-//
-//	ft_ms(&time2);
-//	usleep(((time_to_do * 1000) / 5) * 4);
-//	ft_ms(&time);
-//	while (time_to_do > time - time2)
-//	{
-//		usleep(1000);
-//		ft_ms(&time);
-//	}
-//	return (0);
-//}
-
 int	ft_ms(long *ms)
 {
 	struct timeval	time_val;
