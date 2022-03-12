@@ -30,23 +30,25 @@ void	ft_putnbr(int nbr)
 	write(1, &c, 1);
 }
 
-void	ft_write(char *str, t_philo *philo, bool death)
+bool	ft_write(char *str, t_philo *philo, bool death)
 {
-	(void)death;
-	pthread_mutex_lock(philo->wr_mutex);	
-	if (death == 1 && philo->table->printed_death == 0)
-		(void)death;
-	else if(philo->table->dead)
+	if (death)
+		return (1);
+	if (ft_philo_death(philo))
+		return (1);
+	pthread_mutex_lock(philo->wr_mutex);
+	if(philo->table->dead)
 	{
 		pthread_mutex_unlock(philo->wr_mutex);
-		return ;
+		return (1);
 	}
 	pthread_mutex_unlock(philo->wr_mutex);
-	pthread_mutex_lock(philo->rd_mutex);	
+	pthread_mutex_lock(philo->rd_mutex);
 	ft_puttime(philo->start_time);
 	write(1, "Philo ", 6);
 	ft_putnbr(philo->id + 1);
 	write(1, " ", 1);
 	write(1, str, ft_strlen(str));
 	pthread_mutex_unlock(philo->rd_mutex);
+	return (0);
 }

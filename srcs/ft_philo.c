@@ -3,39 +3,22 @@
 void *routine(void *ptr)
 {
 	t_philo			*philo;
-	struct timeval	time;
 
 	philo = ptr;
 	philo->dead = 0;
 	if (philo->id % 2)
-		ft_sleep(50, 0);
+		ft_sleep(5, 0, NULL);
 	while (philo->dead == 0)
 	{
-		pthread_mutex_lock(philo->rd_mutex);
-		if (ft_timeget(&time) || philo->table->dead == 1)
-		{
-			pthread_mutex_unlock(philo->rd_mutex);
+		if (ft_eat(philo))
 			return (NULL);
-		}
-		if (ft_timediff_us(time, philo->ate_time) >=
-			philo->table->time_to_die * 1000)
-		{
-			pthread_mutex_unlock(philo->rd_mutex);
-			pthread_mutex_lock(philo->wr_mutex);
-			philo->table->dead = 1;
-			pthread_mutex_unlock(philo->wr_mutex);
-			ft_write("died\n", philo, 1);
-			pthread_mutex_lock(philo->wr_mutex);
-			philo->table->printed_death = 1;
-			pthread_mutex_unlock(philo->wr_mutex);
-			break;
-		}
-		pthread_mutex_unlock(philo->rd_mutex);
-		philo->ate_time = time;
-		ft_eat(philo);
-		ft_write("is sleeping\n", philo, 0);
-		ft_sleep(philo->table->time_to_sleep, philo->dead);
-		ft_write("is thinking\n", philo, 0);
+		if (ft_write("is sleeping\n", philo, philo->dead))
+			return (NULL);
+		if (ft_sleep(philo->table->time_to_sleep, philo->dead, philo))
+			return (NULL);
+		if (ft_write("is thinking\n", philo, philo->dead))
+			return (NULL);
+		//dprintf(1, "philo_dead = %d\n", philo->dead);
 	}
 	return (philo);
 }
@@ -46,6 +29,8 @@ char	*create_philos(t_table *table, pthread_mutex_t *mutex_tab)
 	t_philo			philo;
 	bool			dead;
 
+	if (ft_timeget(&philo.start_time))
+		return (NULL);
 	ft_init_mutex(&mutex_tab[0], &mutex_tab[1], &mutex_tab[2], &mutex_tab[3]);
 	i = 0;
 	pthread_mutex_lock(&mutex_tab[0]);
@@ -53,8 +38,6 @@ char	*create_philos(t_table *table, pthread_mutex_t *mutex_tab)
 	{
 		ft_mutex_philo(&philo, &mutex_tab[0], &mutex_tab[1], &mutex_tab[2]);
 		ft_fill_philo(&philo, i, table, table->time_to_eat);
-		if (ft_timeget(&philo.start_time))
-			return (NULL);
 		philo.ate_time = philo.start_time;
 		if (push_dynarray(table->darr, &philo, 1, 0) == -1)
 			return (NULL);
