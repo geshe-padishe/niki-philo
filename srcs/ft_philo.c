@@ -7,7 +7,7 @@ void *routine(void *ptr)
 	philo = ptr;
 	philo->dead = 0;
 	if (philo->id % 2)
-		ft_sleep(5, 0, NULL);
+		ft_sleep(30, 0, NULL);
 	while (philo->dead == 0)
 	{
 		if (ft_eat(philo))

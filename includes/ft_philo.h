@@ -68,5 +68,7 @@ void	ft_fill_philo(t_philo *philo, int id, t_table *table, long tm_to_s);
 bool	ft_philo_death(t_philo *philo);
 bool	ft_fork_and_eat(t_philo *philo, pthread_mutex_t *l_mtx,
 		pthread_mutex_t	*r_mtx);
+void	ft_put_fork_eat(t_philo *philo);
+void	ft_put_death(t_philo *philo);
 
 #endif

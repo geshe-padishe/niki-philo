@@ -36,13 +36,13 @@ bool	ft_write(char *str, t_philo *philo, bool death)
 		return (1);
 	if (ft_philo_death(philo))
 		return (1);
-	pthread_mutex_lock(philo->wr_mutex);
-	if(philo->table->dead)
-	{
-		pthread_mutex_unlock(philo->wr_mutex);
-		return (1);
-	}
-	pthread_mutex_unlock(philo->wr_mutex);
+//	pthread_mutex_lock(philo->wr_mutex);
+//	if(philo->table->dead)
+//	{
+//		pthread_mutex_unlock(philo->wr_mutex);
+//		return (1);
+//	}
+//	pthread_mutex_unlock(philo->wr_mutex);
 	pthread_mutex_lock(philo->rd_mutex);
 	ft_puttime(philo->start_time);
 	write(1, "Philo ", 6);
@@ -51,4 +51,28 @@ bool	ft_write(char *str, t_philo *philo, bool death)
 	write(1, str, ft_strlen(str));
 	pthread_mutex_unlock(philo->rd_mutex);
 	return (0);
+}
+
+void	ft_put_fork_eat(t_philo *philo)
+{
+	pthread_mutex_lock(philo->rd_mutex);
+	ft_puttime(philo->start_time);
+	write(1, "Philo ", 6);
+	ft_putnbr(philo->id + 1);
+	write(1, " has taken a fork\n", ft_strlen(" has taken a fork\n"));
+	ft_puttime(philo->start_time);
+	write(1, "Philo ", 6);
+	ft_putnbr(philo->id + 1);
+	write(1, " is eating\n", ft_strlen(" is eating\n"));
+	pthread_mutex_unlock(philo->rd_mutex);
+}
+
+void	ft_put_death(t_philo *philo)
+{
+	pthread_mutex_lock(philo->rd_mutex);	
+	ft_puttime(philo->start_time);
+	write(1, "Philo ", 6);
+	ft_putnbr(philo->id + 1);
+	write(1, " died\n", ft_strlen(" died\n"));
+	pthread_mutex_unlock(philo->rd_mutex);
 }
