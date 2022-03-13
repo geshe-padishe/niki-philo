@@ -33,7 +33,7 @@ char	*create_philos(t_table *table, pthread_mutex_t *mutex_tab)
 		return (NULL);
 	ft_init_mutex(&mutex_tab[0], &mutex_tab[1], &mutex_tab[2], &mutex_tab[3]);
 	i = 0;
-	pthread_mutex_lock(&mutex_tab[0]);
+	pthread_mutex_lock(&mutex_tab[0]);/*lock wr_mutex*/
 	while (i < table->nb_philos)
 	{
 		ft_mutex_philo(&philo, &mutex_tab[0], &mutex_tab[1], &mutex_tab[2]);

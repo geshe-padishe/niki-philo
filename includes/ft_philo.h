@@ -49,8 +49,6 @@ int	ft_sleep(long millisec, bool dead, t_philo *philo);
 int	ft_ms(long *ms);
 int	ft_timeget(struct timeval *time_val);
 int	ft_timediff_us(struct timeval time_val, struct timeval time_val2);
-void	ft_putnbr(int nbr);
-int	ft_puttime(struct timeval start_time);
 int	ft_strlen(char *str);
 bool	ft_write(char *str, t_philo *philo, bool death);
 int	ft_join_threads(t_table *table);
@@ -65,10 +63,10 @@ bool	ft_eat(t_philo *philo);
 int	ft_fork_index(int	id, int nb_cells);
 char	*create_philos(t_table *table, pthread_mutex_t *mutex_tab);
 void	ft_fill_philo(t_philo *philo, int id, t_table *table, long tm_to_s);
-bool	ft_philo_death(t_philo *philo);
+int	ft_philo_death(t_philo *philo);
 bool	ft_fork_and_eat(t_philo *philo, pthread_mutex_t *l_mtx,
 		pthread_mutex_t	*r_mtx);
-void	ft_put_fork_eat(t_philo *philo);
+bool	ft_put_fork_eat(t_philo *philo);
 void	ft_put_death(t_philo *philo);
 
 #endif

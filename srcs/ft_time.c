@@ -13,7 +13,7 @@ int	ft_sleep(long millisec, bool dead, t_philo *philo)
 		{
 			if (philo && ft_philo_death(philo))
 				return (1);
-			if (usleep(1000))
+			if (usleep(1))
 				return (-1);
 			ft_timeget(&time2);
 		}
