@@ -23,8 +23,9 @@ bool	ft_write(char *str, t_philo *philo, bool death)
 	}
 	if (ft_timeget(&current_time))
 		return (-1);
-	printf("%i Philo %i %s", ft_timediff_us(current_time, philo->start_time) / 1000,
-			philo->id + 1, str);
+	printf("%i Philo %i %s",
+		ft_timediff_us(current_time, philo->start_time) / 1000,
+		philo->id + 1, str);
 	pthread_mutex_unlock(philo->rd_mutex);
 	return (0);
 }
@@ -60,6 +61,6 @@ void	ft_put_death(t_philo *philo)
 	if (ft_timeget(&current_time))
 		return ;
 	printf("%i Philo %i died\n",
-			ft_timediff_us(current_time, philo->start_time) / 1000,
-			philo->id + 1);
+		ft_timediff_us(current_time, philo->start_time) / 1000,
+		philo->id + 1);
 }

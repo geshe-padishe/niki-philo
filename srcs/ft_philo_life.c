@@ -1,16 +1,19 @@
 #include "ft_philo.h"
 
 bool	ft_fork_and_eat(t_philo *philo, pthread_mutex_t *l_mtx,
-		pthread_mutex_t	*r_mtx)
+		pthread_mutex_t	*r_mtx, int first_time)
 {
-//	if (philo->time_to_sleep > philo->time_to_eat)
-//		if (ft_sleep(philo->time_to_sleep - philo->time_to_eat, 0, philo))
-//			return (1);
+	t_table	*table;
+
+	table = philo->table;
+	if (!first_time && philo->time_to_eat > table->time_to_die / 2)
+		if (ft_sleep(philo->time_to_eat * 2 - table->time_to_die, 0, philo))
+			return (1);
 	pthread_mutex_lock(l_mtx);
 	ft_write("has taken a fork\n", philo, 0);
-//	if (philo->time_to_sleep > philo->time_to_eat)
-//		if (ft_sleep(philo->time_to_sleep - philo->time_to_eat, 0, philo))
-//			return (1);
+	if (!first_time && philo->time_to_eat > table->time_to_die / 2)
+		if (ft_sleep(philo->time_to_eat * 2 - table->time_to_die, 0, philo))
+			return (1);
 	pthread_mutex_lock(r_mtx);
 	ft_put_fork_eat(philo);
 	ft_sleep(philo->table->time_to_eat, philo->dead, philo);
@@ -19,7 +22,7 @@ bool	ft_fork_and_eat(t_philo *philo, pthread_mutex_t *l_mtx,
 	return (0);
 }
 
-bool	ft_eat(t_philo *philo)
+bool	ft_eat(t_philo *philo, int first_time)
 {
 	t_philo			*philos;
 	int				nb_cells;
@@ -39,7 +42,7 @@ bool	ft_eat(t_philo *philo)
 		l_mtx = r_mtx;
 		r_mtx = swp;
 	}
-	return (ft_fork_and_eat(philo, l_mtx, r_mtx));
+	return (ft_fork_and_eat(philo, l_mtx, r_mtx, first_time));
 }
 
 int	ft_philo_death(t_philo *philo)
@@ -53,11 +56,10 @@ int	ft_philo_death(t_philo *philo)
 		pthread_mutex_unlock(philo->wr_mutex);
 		return (1);
 	}
-	else if (ft_timediff_us(time, philo->ate_time) >=
-				philo->table->time_to_die * 1000)
+	else if (ft_timediff_us(time,
+			philo->ate_time) >= philo->table->time_to_die * 1000)
 	{
 		ft_put_death(philo);
-		printf("timediff = %i\n", ft_timediff_us(time, philo->ate_time) / 1000);
 		philo->table->dead = 1;
 		pthread_mutex_unlock(philo->wr_mutex);
 		return (-1);
@@ -67,7 +69,7 @@ int	ft_philo_death(t_philo *philo)
 	return (0);
 }
 
-int	ft_fork_index(int	index, int nb_cells)
+int	ft_fork_index(int index, int nb_cells)
 {
 	if (index == -1)
 		return (nb_cells - 1);

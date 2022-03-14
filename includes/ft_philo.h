@@ -61,14 +61,14 @@ void	ft_init_mutex(pthread_mutex_t *wr_mutex, pthread_mutex_t *rd_mutex,
 void	ft_destroy_mutex(pthread_mutex_t *wr_mutex, pthread_mutex_t *rd_mutex,
 						pthread_mutex_t *sleep_mutex,
 						pthread_mutex_t *forks_mutex);
-bool	ft_eat(t_philo *philo);
+bool	ft_eat(t_philo *philo, int first_time);
 int	ft_fork_index(int	id, int nb_cells);
 char	*create_philos(t_table *table, pthread_mutex_t *mutex_tab);
 void	ft_fill_philo(t_philo *philo, t_table *table,
 					pthread_mutex_t *mutex_tab);
 int	ft_philo_death(t_philo *philo);
 bool	ft_fork_and_eat(t_philo *philo, pthread_mutex_t *l_mtx,
-		pthread_mutex_t	*r_mtx);
+		pthread_mutex_t	*r_mtx, int first_time);
 bool	ft_put_fork_eat(t_philo *philo);
 void	ft_put_death(t_philo *philo);
 bool	ft_philos_fed(t_table *table);

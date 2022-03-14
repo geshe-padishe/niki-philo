@@ -43,7 +43,7 @@ int	ft_timediff_us(struct timeval time_val, struct timeval time_val2)
 {
 	int	us;
 
-	us = (time_val.tv_sec - time_val2.tv_sec) * 1000000 +
-		(time_val.tv_usec - time_val2.tv_usec);
+	us = (time_val.tv_sec - time_val2.tv_sec) * 1000000
+		+ (time_val.tv_usec - time_val2.tv_usec);
 	return (us);
 }
