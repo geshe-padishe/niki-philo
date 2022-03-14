@@ -30,3 +30,24 @@ void	ft_fill_philo(t_philo *philo, int id, t_table *table, long tm_to_s)
 	philo->time_to_eat = tm_to_s;
 	philo->id = id;
 }
+
+bool	ft_philos_fed(t_table *table)
+{
+	unsigned long	i;
+	t_philo			*philo;
+
+	philo = table->darr->list;
+	i = 0;
+	while (i < table->darr->nb_cells)
+	{
+		pthread_mutex_lock(philo->meal_mutex);
+		if (philo[i].nb_meals != philo[i].meals)
+		{
+			pthread_mutex_unlock(philo->meal_mutex);
+			return (0);
+		}
+		pthread_mutex_unlock(philo->meal_mutex);
+		i++;
+	}
+	return (1);
+}

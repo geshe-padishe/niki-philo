@@ -47,6 +47,9 @@ bool	ft_put_fork_eat(t_philo *philo)
 	printf("%i Philo %i is eating\n",
 			ft_timediff_us(current_time, philo->start_time) / 1000,
 			philo->id + 1);
+	pthread_mutex_lock(philo->meal_mutex);
+	philo->meals += 1;
+	pthread_mutex_unlock(philo->meal_mutex);
 	pthread_mutex_unlock(philo->rd_mutex);
 	return (0);
 }

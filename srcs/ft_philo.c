@@ -5,7 +5,6 @@ void *routine(void *ptr)
 	t_philo			*philo;
 
 	philo = ptr;
-	philo->dead = 0;
 	if (philo->id % 2)
 		ft_sleep(30, 0, NULL);
 	while (philo->dead == 0)
@@ -18,7 +17,17 @@ void *routine(void *ptr)
 			return (NULL);
 		if (ft_write("is thinking\n", philo, philo->dead))
 			return (NULL);
-		//dprintf(1, "philo_dead = %d\n", philo->dead);
+		if (philo->nb_meals != 0)
+		{
+			pthread_mutex_lock(philo->meal_mutex);
+			//printf("meals = %i, nb_meals = %i\n", philo->meals, philo->nb_meals);
+			if (philo->meals == philo->nb_meals)
+			{
+				pthread_mutex_unlock(philo->meal_mutex);
+				return (NULL);
+			}
+			pthread_mutex_unlock(philo->meal_mutex);
+		}
 	}
 	return (philo);
 }
@@ -39,6 +48,8 @@ char	*create_philos(t_table *table, pthread_mutex_t *mutex_tab)
 		ft_mutex_philo(&philo, &mutex_tab[0], &mutex_tab[1], &mutex_tab[2]);
 		ft_fill_philo(&philo, i, table, table->time_to_eat);
 		philo.ate_time = philo.start_time;
+		philo.nb_meals = table->nb_meals;
+		philo.meals = 0;
 		if (push_dynarray(table->darr, &philo, 1, 0) == -1)
 			return (NULL);
 		pthread_mutex_init(&((t_philo *)table->darr->list)[i].fork, NULL);
@@ -51,6 +62,10 @@ char	*create_philos(t_table *table, pthread_mutex_t *mutex_tab)
 	dead = 0;
 	while (dead == 0)
 	{
+		//printf("CA BOUCLE ICI %li\n", i++);
+		if (philo.nb_meals != 0)
+			if (ft_philos_fed(table))
+				return (0);
 		pthread_mutex_lock(&mutex_tab[0]);
 		dead = table->dead;
 		pthread_mutex_unlock(&mutex_tab[0]);
@@ -65,13 +80,12 @@ int main(int argc, char **argv)
 	pthread_mutex_t	mutex_tab[4];
 
 	ft_memset(&table, sizeof(t_table));
-	if (argc != 6 || parse_args(argv, &table) != 0)
+	if ((argc != 6 && argc != 5) || parse_args(argc, argv, &table) != 0)
 		return (printf("Invalid Args\n"), -1);
 	if (init_dynarray(&darr, table.nb_philos, sizeof(t_philo)) == -1)
 		return (free_dynarray(&darr), -1);
 	table.darr = &darr;
 	create_philos(&table, (pthread_mutex_t *)&mutex_tab);
-	//printf("addr = %p\n", ((t_philo *)darr.list)[0].wr_mutex);
 	if (ft_join_threads(&table))
 		return (-1);
 	ft_destroy_mutex(&mutex_tab[0], &mutex_tab[1], &mutex_tab[2], &mutex_tab[3]);

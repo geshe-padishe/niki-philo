@@ -6,7 +6,7 @@ void	ft_mutex_philo(t_philo *philo, pthread_mutex_t *wr_mutex,
 	philo->dead = 0;
 	philo->wr_mutex = wr_mutex;
 	philo->rd_mutex = rd_mutex;
-	philo->sleep_mutex = sleep_mutex;
+	philo->meal_mutex = sleep_mutex;
 }
 
 void	ft_init_mutex(pthread_mutex_t *wr_mutex, pthread_mutex_t *rd_mutex,

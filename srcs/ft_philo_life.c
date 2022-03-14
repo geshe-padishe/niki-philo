@@ -3,9 +3,26 @@
 bool	ft_fork_and_eat(t_philo *philo, pthread_mutex_t *l_mtx,
 		pthread_mutex_t	*r_mtx)
 {
-	pthread_mutex_lock(l_mtx);
+	while (pthread_mutex_trylock(l_mtx))
+	{
+		if (ft_philo_death(philo))
+		{
+			pthread_mutex_unlock(l_mtx);
+			return (1);
+		}
+	}
+	//pthread_mutex_lock(l_mtx);
 	ft_write("has taken a fork\n", philo, 0);
-	pthread_mutex_lock(r_mtx);
+	while (pthread_mutex_trylock(r_mtx))
+	{
+		if (ft_philo_death(philo))
+		{
+			pthread_mutex_unlock(r_mtx);
+			pthread_mutex_unlock(l_mtx);
+			return (1);
+		}
+	}
+	//pthread_mutex_lock(r_mtx);
 	ft_put_fork_eat(philo);
 	ft_timeget(&philo->ate_time);
 	ft_sleep(philo->table->time_to_eat, philo->dead, philo);

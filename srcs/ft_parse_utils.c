@@ -38,7 +38,7 @@ int	ft_atoi(char *nstr)
 	return ((int)nbr * sign);
 }
 
-int	parse_args(char **argv, t_table *table)
+int	parse_args(int argc, char **argv, t_table *table)
 {
 	table->nb_philos = ft_atoi(argv[1]);
 	if (table->nb_philos <= 0)
@@ -52,8 +52,11 @@ int	parse_args(char **argv, t_table *table)
 	table->time_to_sleep = ft_atoi(argv[4]);
 	if (table->time_to_sleep <= 60)
 		return (-1);
-	table->nb_meals = ft_atoi(argv[5]);
-//	if (table->nb_meals <= 60)
-//		return (-1);
+	if (argc == 6)
+	{
+		table->nb_meals = ft_atoi(argv[5]);
+		if (table->nb_meals <= 0)
+			return (-1);
+	}
 	return (0);
 }
