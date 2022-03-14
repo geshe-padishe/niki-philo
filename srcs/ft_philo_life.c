@@ -3,28 +3,16 @@
 bool	ft_fork_and_eat(t_philo *philo, pthread_mutex_t *l_mtx,
 		pthread_mutex_t	*r_mtx)
 {
-	while (pthread_mutex_trylock(l_mtx))
-	{
-		if (ft_philo_death(philo))
-		{
-			pthread_mutex_unlock(l_mtx);
-			return (1);
-		}
-	}
-	//pthread_mutex_lock(l_mtx);
+//	if (philo->time_to_sleep > philo->time_to_eat)
+//		if (ft_sleep(philo->time_to_sleep - philo->time_to_eat, 0, philo))
+//			return (1);
+	pthread_mutex_lock(l_mtx);
 	ft_write("has taken a fork\n", philo, 0);
-	while (pthread_mutex_trylock(r_mtx))
-	{
-		if (ft_philo_death(philo))
-		{
-			pthread_mutex_unlock(r_mtx);
-			pthread_mutex_unlock(l_mtx);
-			return (1);
-		}
-	}
-	//pthread_mutex_lock(r_mtx);
+//	if (philo->time_to_sleep > philo->time_to_eat)
+//		if (ft_sleep(philo->time_to_sleep - philo->time_to_eat, 0, philo))
+//			return (1);
+	pthread_mutex_lock(r_mtx);
 	ft_put_fork_eat(philo);
-	ft_timeget(&philo->ate_time);
 	ft_sleep(philo->table->time_to_eat, philo->dead, philo);
 	pthread_mutex_unlock(l_mtx);
 	pthread_mutex_unlock(r_mtx);
@@ -69,7 +57,7 @@ int	ft_philo_death(t_philo *philo)
 				philo->table->time_to_die * 1000)
 	{
 		ft_put_death(philo);
-		//printf("timediff = %i\n", ft_timediff_us(time, philo->ate_time) / 1000);
+		printf("timediff = %i\n", ft_timediff_us(time, philo->ate_time) / 1000);
 		philo->table->dead = 1;
 		pthread_mutex_unlock(philo->wr_mutex);
 		return (-1);

@@ -32,6 +32,7 @@ bool	ft_write(char *str, t_philo *philo, bool death)
 bool	ft_put_fork_eat(t_philo *philo)
 {
 	struct timeval	current_time;
+	int				time_diff;
 
 	pthread_mutex_lock(philo->rd_mutex);
 	if (ft_philo_death(philo))
@@ -41,12 +42,10 @@ bool	ft_put_fork_eat(t_philo *philo)
 	}
 	if (ft_timeget(&current_time))
 		return (1);
-	printf("%i Philo %i has taken a fork\n",
-			ft_timediff_us(current_time, philo->start_time) / 1000,
-			philo->id + 1);
-	printf("%i Philo %i is eating\n",
-			ft_timediff_us(current_time, philo->start_time) / 1000,
-			philo->id + 1);
+	philo->ate_time = current_time;
+	time_diff = ft_timediff_us(current_time, philo->start_time) / 1000;
+	printf("%i Philo %i has taken a fork\n", time_diff, philo->id + 1);
+	printf("%i Philo %i is eating\n", time_diff, philo->id + 1);
 	pthread_mutex_lock(philo->meal_mutex);
 	philo->meals += 1;
 	pthread_mutex_unlock(philo->meal_mutex);

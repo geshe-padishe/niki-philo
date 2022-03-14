@@ -24,11 +24,15 @@ int	ft_join_threads(t_table *table)
 	return (0);
 }
 
-void	ft_fill_philo(t_philo *philo, int id, t_table *table, long tm_to_s)
+void	ft_fill_philo(t_philo *philo, t_table *table, pthread_mutex_t *mutex_tab)
 {
 	philo->table = table;
-	philo->time_to_eat = tm_to_s;
-	philo->id = id;
+	philo->time_to_eat = table->time_to_eat;
+	philo->time_to_sleep = table->time_to_sleep;
+	philo->nb_meals = table->nb_meals;
+	ft_mutex_philo(philo, &mutex_tab[0], &mutex_tab[1], &mutex_tab[2]);
+	ft_timeget(&philo->start_time);
+	philo->ate_time = philo->start_time;
 }
 
 bool	ft_philos_fed(t_table *table)

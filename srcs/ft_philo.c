@@ -38,27 +38,26 @@ char	*create_philos(t_table *table, pthread_mutex_t *mutex_tab)
 	t_philo			philo;
 	bool			dead;
 
-	if (ft_timeget(&philo.start_time))
-		return (NULL);
-	ft_init_mutex(&mutex_tab[0], &mutex_tab[1], &mutex_tab[2], &mutex_tab[3]);
 	i = 0;
-	pthread_mutex_lock(&mutex_tab[0]);/*lock wr_mutex*/
+	ft_memset(&philo, sizeof(t_philo));
+	ft_init_mutex(&mutex_tab[0], &mutex_tab[1], &mutex_tab[2], &mutex_tab[3]);
+	ft_fill_philo(&philo, table, mutex_tab);
 	while (i < table->nb_philos)
 	{
-		ft_mutex_philo(&philo, &mutex_tab[0], &mutex_tab[1], &mutex_tab[2]);
-		ft_fill_philo(&philo, i, table, table->time_to_eat);
-		philo.ate_time = philo.start_time;
-		philo.nb_meals = table->nb_meals;
-		philo.meals = 0;
+		philo.id = i;
 		if (push_dynarray(table->darr, &philo, 1, 0) == -1)
 			return (NULL);
 		pthread_mutex_init(&((t_philo *)table->darr->list)[i].fork, NULL);
+		i++;
+	}
+	i = 0;
+	while (i < table->nb_philos)
+	{
 		if (pthread_create(&((t_philo *)table->darr->list)[i].thread, NULL,
-							&routine, &((t_philo *)table->darr->list)[i]))
+						&routine, &((t_philo *)table->darr->list)[i]))
 			return (NULL);
 		i++;
 	}
-	pthread_mutex_unlock(&mutex_tab[0]);
 	dead = 0;
 	while (dead == 0)
 	{

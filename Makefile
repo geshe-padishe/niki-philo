@@ -2,7 +2,7 @@ CC = gcc
 
 NAME = philo
 
-CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -pthread -fsanitize=thread -g3
 SRC	=	dynarray2.c dynarray.c ft_parse_utils.c ft_philo.c \
 		ft_mems.c ft_time.c ft_print.c ft_philo2.c ft_mutex.c \
 		ft_philo_life.c
